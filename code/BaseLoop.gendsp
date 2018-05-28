@@ -9,7 +9,7 @@
 			"modernui" : 1
 		}
 ,
-		"rect" : [ 364.0, 363.0, 829.0, 519.0 ],
+		"rect" : [ 623.0, 173.0, 1160.0, 766.0 ],
 		"editing_bgcolor" : [ 0.9, 0.9, 0.9, 1.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
@@ -39,11 +39,47 @@
 		"subpatcher_template" : "",
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-6",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 854.0, 488.0, 37.0, 22.0 ],
+					"style" : "",
+					"text" : "out 5"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-5",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 762.0, 486.0, 37.0, 22.0 ],
+					"style" : "",
+					"text" : "out 4"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-3",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 536.0, 486.0, 37.0, 22.0 ],
+					"style" : "",
+					"text" : "out 3"
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-2",
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 484.0, 498.0, 37.0, 22.0 ],
+					"patching_rect" : [ 272.0, 485.0, 37.0, 22.0 ],
 					"style" : "",
 					"text" : "out 2"
 				}
@@ -64,16 +100,16 @@
 			}
 , 			{
 				"box" : 				{
-					"code" : "Data looper(441000);\r\nHistory offset(0);\r\nHistory length(0);\r\nHistory index(0);\r\nHistory state(0);\r\nHistory fader(0);\r\nfadeTime=2205;\r\n\r\n\r\nSTOPPED = 0;\r\nRECORDING = 1;\r\nSTARTING = 2;\r\nPLAYING = 3;\r\nlen = dim(looper);\r\n\r\n\r\nif(in3){\r\n\tstate=STOPPED;\r\n\tfader = 0;\r\n\toffset=0;\r\n\tlength=0;\r\n\tindex=0;\r\n\tfmax = -1000;\r\n\tfmin = 1000;\r\n}\r\n\r\nif(state==STOPPED && in2){\r\n\toffset = index;\r\n\tstate = RECORDING;\r\n\t\r\n}else if(state==RECORDING && in2){\r\n\tstate = STARTING;\r\n\tlength = min(length,len);\r\n}\r\n\r\nif(state==RECORDING){\r\n\tlength = length+1;\r\n\t\r\n}\r\n\r\n\r\nread = 0;\r\n\r\nif(index>=len){\r\n\t\r\n\tindex=0;\r\n}\r\n\r\nif(state == PLAYING || state == STARTING){\r\n\tif(mod(index+len-offset,len) > length){ \r\n\t\tindex=offset;\r\n\t}\r\n\tread = peek(looper, index);\r\n\t\r\n}\r\n\r\n//if(state == STARTING){\r\n//\tif(mod(index+len-offset,len) > length){\r\n//\t\tindex=offset;\r\n//\t}\r\n//\tread = peek(looper, writeIndex);\r\n//\t\r\n//}\r\nt = fader/fadeTime*2-1;\r\nread = read*sqrt(0.5*(1+t));\r\n\r\nif(state != PLAYING){\r\n\tpoke(looper,in1*sqrt(0.5*(1-t))+read, index);\r\n}\r\n\r\nif(state == STARTING){\r\n\tif(fader>=fadeTime){\r\n\t\tstate=PLAYING;\r\n\t}\r\n\tfader=fader+1;\r\n}\r\n\r\nout1 = read;\r\n\r\nindex = index+1;\r\n",
+					"code" : "Data looper(441000);\r\nHistory offset(0);\r\nHistory length(0);\r\nHistory index(0);\r\nHistory state(0);\r\nHistory fader(0);\r\nfadeTime=2205;\r\n\r\n\r\nSTOPPED = 0;\r\nRECORDING = 1;\r\nPLAYING = 2;\r\nlen = dim(looper);\r\n\r\nrepeat = 0;\r\n\r\nif(in3){\r\n\tstate=STOPPED;\r\n\tfader = 0;\r\n\toffset=0;\r\n\tlength=0;\r\n\tindex=0;\r\n}\r\n\r\nif(state==STOPPED && in2){\r\n\toffset = index;\r\n\tstate = RECORDING;\r\n\t\r\n}else if(state==RECORDING && in2){\r\n\tstate = PLAYING;\r\n\tlength = min(length,len);\r\n}\r\n\r\nif(state==RECORDING){\r\n\tlength = length+1;\r\n\t\r\n}\r\n\r\n\r\nread = 0;\r\n\r\nif(index>=len){\r\n\t\r\n\tindex=0;\r\n}\r\nposition = mod(index+len-offset,len);\r\nif(state == PLAYING){\r\n\tif(position >= length){ \r\n\t\tindex=offset;\r\n\t\tposition=0;\r\n\t\trepeat = 1;\r\n\t}\r\n \tfadeOut = peek(looper, index);\r\n\tfadeIn = peek(looper,mod(index+len-length,len));\r\n\tt = clamp(-(position-length)/fadeTime,0,1)*2-1;\r\n\tread = fadeOut*sqrt(0.5*(1+t))+fadeIn*sqrt(0.5*(1-t));\r\n}\r\n\r\nif(state != PLAYING){\r\n\tpoke(looper,in1, index);\r\n}\r\n\r\nif(state == PLAYING){\r\n\tfader=min(fadeTime,fader+1);\r\n}\r\n\r\nout1 = read*(fader/fadeTime);\r\n\r\nout2 = position;\r\n\r\nout3 = repeat;\r\n\r\nout4 = length;\r\n\r\n\r\nindex = index+1;\r\n",
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 12.0,
 					"id" : "obj-16",
 					"maxclass" : "codebox",
 					"numinlets" : 3,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 46.0, 74.0, 743.0, 391.0 ],
+					"numoutlets" : 4,
+					"outlettype" : [ "", "", "", "" ],
+					"patching_rect" : [ 113.0, 54.0, 743.0, 391.0 ],
 					"style" : ""
 				}
 
@@ -133,8 +169,29 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-2", 0 ],
+					"source" : [ "obj-16", 1 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-3", 0 ],
+					"source" : [ "obj-16", 2 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-4", 0 ],
 					"source" : [ "obj-16", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-5", 0 ],
+					"source" : [ "obj-16", 3 ]
 				}
 
 			}
