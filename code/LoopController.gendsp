@@ -9,7 +9,7 @@
 			"modernui" : 1
 		}
 ,
-		"rect" : [ 824.0, 135.0, 1062.0, 766.0 ],
+		"rect" : [ 84.0, 129.0, 600.0, 450.0 ],
 		"editing_bgcolor" : [ 0.9, 0.9, 0.9, 1.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
@@ -39,11 +39,24 @@
 		"subpatcher_template" : "",
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-3",
+					"maxclass" : "newobj",
+					"numinlets" : 0,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 54.0, 13.0, 30.0, 22.0 ],
+					"style" : "",
+					"text" : "in 1"
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-2",
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 534.0, 542.0, 37.0, 22.0 ],
+					"patching_rect" : [ 401.0, 418.0, 37.0, 22.0 ],
 					"style" : "",
 					"text" : "out 2"
 				}
@@ -51,41 +64,28 @@
 			}
 , 			{
 				"box" : 				{
-					"id" : "obj-20",
-					"maxclass" : "newobj",
-					"numinlets" : 0,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 875.0, -1.0, 30.0, 22.0 ],
-					"style" : "",
-					"text" : "in 3"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"code" : "Data looper(441000);\r\nHistory offset(0);\r\nHistory index(0);\r\nHistory fader(0);\r\nHistory oldState(0);\r\nfadeTime=2205;\r\n\r\n\r\nSTOPPED = 0;\r\nRECORDING = 1;\r\nPLAYING = 2;\r\nlen = dim(looper);\r\n\r\nstate = in2;\r\nlength = in3;\r\n\r\nif(state!=oldState && state==RECORDING){ // flip to recording\r\n\toffset = index;\r\n}\r\noldState = state;\r\nread = 0;\r\n\r\nif(index>=len){\r\n\t\r\n\tindex=0;\r\n}\r\nposition = mod(index+len-offset,len);\r\nif(state == PLAYING){\r\n\tif(position >= length){ \r\n\t\tindex=offset;\r\n\t\tposition=0;\r\n\t}\r\n \tfadeOut = peek(looper, index);\r\n\tfadeIn = peek(looper,mod(index+len-length,len));\r\n\tt = clamp(-(position-length)/fadeTime,0,1)*2-1;\r\n\tread = fadeOut*sqrt(0.5*(1+t))+fadeIn*sqrt(0.5*(1-t));\r\n}\r\n\r\nif(state != PLAYING){\r\n\tpoke(looper,in1, index);\r\n}\r\n\r\nif(state == PLAYING){\r\n\tfader=min(fadeTime,fader+1);\r\n}\r\n\r\nout1 = read*(fader/fadeTime);\r\n\r\nindex = index+1;\r\n\r\nout2 = offset;\r\n",
+					"code" : "History length(0);\r\nHistory state(0);\r\n\r\nSTOPPED = 0;\r\nRECORDING = 1;\r\nPLAYING = 2;\r\nlen = 441000;\r\n\r\nif(in1 && state==STOPPED){\r\n\tstate=RECORDING;\r\n}else if(in1 && state==RECORDING){\r\n\tstate=PLAYING;\r\n\tlength = min(length,len);\r\n}else if(in1 && state==PLAYING){\r\n\tstate=STOPPED;\r\n\tlength=0;\r\n}\r\n\r\nif(state==RECORDING){\r\n\tlength = length+1;\r\n}\r\n\r\nout1 = state;\r\nout2 = length;",
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 12.0,
-					"id" : "obj-16",
+					"id" : "obj-6",
 					"maxclass" : "codebox",
-					"numinlets" : 3,
+					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 113.0, 54.0, 743.0, 391.0 ],
+					"patching_rect" : [ 54.0, 57.0, 539.0, 320.0 ],
 					"style" : ""
 				}
 
 			}
 , 			{
 				"box" : 				{
-					"id" : "obj-13",
+					"id" : "obj-5",
 					"maxclass" : "newobj",
 					"numinlets" : 0,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 151.0, 14.0, 30.0, 22.0 ],
+					"patching_rect" : [ 249.0, 66.0, 30.0, 22.0 ],
 					"style" : "",
 					"text" : "in 2"
 				}
@@ -98,7 +98,7 @@
 					"numinlets" : 0,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 50.0, 14.0, 30.0, 22.0 ],
+					"patching_rect" : [ 102.0, 66.0, 30.0, 22.0 ],
 					"style" : "",
 					"text" : "in 1"
 				}
@@ -110,7 +110,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 162.0, 485.0, 37.0, 22.0 ],
+					"patching_rect" : [ 176.0, 418.0, 37.0, 22.0 ],
 					"style" : "",
 					"text" : "out 1"
 				}
@@ -119,36 +119,22 @@
  ],
 		"lines" : [ 			{
 				"patchline" : 				{
-					"destination" : [ "obj-16", 0 ],
-					"source" : [ "obj-1", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-16", 1 ],
-					"source" : [ "obj-13", 0 ]
+					"destination" : [ "obj-6", 0 ],
+					"source" : [ "obj-3", 0 ]
 				}
 
 			}
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-2", 0 ],
-					"source" : [ "obj-16", 1 ]
+					"source" : [ "obj-6", 1 ]
 				}
 
 			}
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-4", 0 ],
-					"source" : [ "obj-16", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-16", 2 ],
-					"source" : [ "obj-20", 0 ]
+					"source" : [ "obj-6", 0 ]
 				}
 
 			}
