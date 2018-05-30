@@ -9,7 +9,7 @@
 			"modernui" : 1
 		}
 ,
-		"rect" : [ 986.0, 159.0, 900.0, 946.0 ],
+		"rect" : [ 927.0, 153.0, 900.0, 946.0 ],
 		"editing_bgcolor" : [ 0.9, 0.9, 0.9, 1.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
@@ -39,25 +39,14 @@
 		"subpatcher_template" : "",
 		"boxes" : [ 			{
 				"box" : 				{
-					"id" : "obj-14",
+					"id" : "obj-2",
 					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 718.0, 692.0, 37.0, 22.0 ],
+					"numinlets" : 0,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 725.0, 18.0, 30.0, 22.0 ],
 					"style" : "",
-					"text" : "out 4"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-12",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 608.0, 697.0, 37.0, 22.0 ],
-					"style" : "",
-					"text" : "out 3"
+					"text" : "in 2"
 				}
 
 			}
@@ -75,67 +64,15 @@
 			}
 , 			{
 				"box" : 				{
-					"id" : "obj-9",
-					"maxclass" : "newobj",
-					"numinlets" : 0,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 715.333313, 14.0, 30.0, 22.0 ],
-					"style" : "",
-					"text" : "in 6"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-8",
-					"maxclass" : "newobj",
-					"numinlets" : 0,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 598.0, 14.0, 30.0, 22.0 ],
-					"style" : "",
-					"text" : "in 5"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-7",
-					"maxclass" : "newobj",
-					"numinlets" : 0,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 492.0, 14.0, 30.0, 22.0 ],
-					"style" : "",
-					"text" : "in 4"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-6",
-					"maxclass" : "newobj",
-					"numinlets" : 0,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 389.0, 14.0, 30.0, 22.0 ],
-					"style" : "",
-					"text" : "in 3"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"code" : "Data looper(441000);\r\n\r\nHistory reps(0);\r\nHistory rep(0);\r\nHistory state(0);\r\nHistory fader(0);\r\nHistory recdir(0);\r\nfadeTime=2205;\r\n\r\n\r\nSTOPPED = 0;\r\nRECORDING = 1;\r\nPENDING = 2;\r\nPLAYING = 3;\r\nSTARTING = 4;\r\nlen = dim(looper);\r\n\r\nindex = in4;\r\nbaseLength = in6;\r\nrepeat = in5;\r\n\r\n\r\nif(in3){\r\n\tstate=STOPPED;\r\n\tfader = 0;\r\n\treps=0;\r\n\trep = 0;\r\n\trecdir=0;\r\n}\r\n\r\nif(state==STOPPED && in2){\r\n\tstate = RECORDING;\r\n}else if(state==RECORDING && in2){\r\n\tstate = PENDING;\r\n\treps = min(rep+round(index/baseLength),floor(len/baseLength));\r\n}\r\n\r\nif(state!=STOPPED){\r\n\tif(repeat){\r\n\t\tif(state!=RECORDING || recdir>baseLength/2){\r\n\t\t\trep = rep+1;\r\n\t\t}\r\n\t}\r\n\tif(rep>=reps && state!=RECORDING){\r\n\t\trep = 0;\r\n\t}\r\n}\r\nif(state==RECORDING){\r\n\trecdir = recdir+1;\r\n}\r\nif(state==PENDING && rep==0){\r\n\tstate=STARTING;\r\n}\r\nread = 0;\r\n\r\nfullIndex = index;\r\nif(state!=STOPPED){\r\n\tfullIndex = (index+rep*baseLength)%len;\r\n}\r\n\r\n\r\nif(state == PLAYING || state == STARTING){\r\n\tread = peek(looper, fullIndex);\r\n}\r\n\r\nt = fader/fadeTime*2-1;\r\nread = read*sqrt(0.5*(1+t));\r\n\r\n\r\nif(state!=PLAYING){\r\n\tpoke(looper,in1*sqrt(0.5*(1-t))+read, fullIndex);\r\n}\r\n\r\n\r\nif(state == STARTING){\r\n\tif(fader>=fadeTime){\r\n\t\tstate=PLAYING;\r\n\t}\r\n\tfader=fader+1;\r\n}\r\n\r\nout1 = read;\r\n\r\nout2 = rep;\r\nout3 = reps;\r\nout4 = recdir;\r\n",
+					"code" : "History state(0);\r\nHistory length(0);\r\nHistory targetLength(0);\r\n\r\nSTOPPED = 0;\r\nRECORDING = 1;\r\nPLAYING = 2;\r\n\r\nlen = 441000;\r\nbaseLength = in1;\r\n\r\nif(state==STOPPED && in2){\r\n\tstate = RECORDING;\r\n}else if(state==RECORDING && in2){\r\n\ttargetLength = min(round(length/baseLength),floor(len/baseLength))*baseLength;\r\n}else if(state==PLAYING && in2){\r\n\tstate=STOPPED;\r\n\tlength=0;\r\n\ttargetLength=0;\r\n}\r\n\r\nif(state==RECORDING){\r\n\tlength=length+1;\r\n}\r\n\r\nif(targetLength>0 && length>=targetLength){\r\n\tstate=PLAYING;\r\n}\r\n\r\nout1 = state;\r\nout2 = targetLength;\r\n",
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 12.0,
 					"id" : "obj-5",
 					"maxclass" : "codebox",
-					"numinlets" : 6,
-					"numoutlets" : 4,
-					"outlettype" : [ "", "", "", "" ],
+					"numinlets" : 2,
+					"numoutlets" : 2,
+					"outlettype" : [ "", "" ],
 					"patching_rect" : [ 152.0, 59.0, 695.0, 545.0 ],
 					"style" : ""
 				}
@@ -151,19 +88,6 @@
 					"patching_rect" : [ 144.0, 18.0, 30.0, 22.0 ],
 					"style" : "",
 					"text" : "in 1"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-2",
-					"maxclass" : "newobj",
-					"numinlets" : 0,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 305.0, 14.0, 30.0, 22.0 ],
-					"style" : "",
-					"text" : "in 2"
 				}
 
 			}
@@ -203,55 +127,12 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-12", 0 ],
-					"source" : [ "obj-5", 2 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-14", 0 ],
-					"source" : [ "obj-5", 3 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
 					"destination" : [ "obj-4", 0 ],
 					"source" : [ "obj-5", 0 ]
 				}
 
 			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-5", 2 ],
-					"source" : [ "obj-6", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-5", 3 ],
-					"source" : [ "obj-7", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-5", 4 ],
-					"source" : [ "obj-8", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-5", 5 ],
-					"source" : [ "obj-9", 0 ]
-				}
-
-			}
- ],
-		"autosave" : 0
+ ]
 	}
 
 }
