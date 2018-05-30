@@ -64,7 +64,7 @@
 			}
 , 			{
 				"box" : 				{
-					"code" : "History state(0);\r\nHistory length(0);\r\nHistory targetLength(0);\r\n\r\nSTOPPED = 0;\r\nRECORDING = 1;\r\nPLAYING = 2;\r\n\r\nlen = 441000;\r\nbaseLength = in1;\r\n\r\nif(state==STOPPED && in2){\r\n\tstate = RECORDING;\r\n}else if(state==RECORDING && in2){\r\n\ttargetLength = min(round(length/baseLength),floor(len/baseLength))*baseLength;\r\n}else if(state==PLAYING && in2){\r\n\tstate=STOPPED;\r\n\tlength=0;\r\n\ttargetLength=0;\r\n}\r\n\r\nif(state==RECORDING){\r\n\tlength=length+1;\r\n}\r\n\r\nif(targetLength>0 && length>=targetLength){\r\n\tstate=PLAYING;\r\n}\r\n\r\nout1 = state;\r\nout2 = targetLength;\r\n",
+					"code" : "History state(0);\r\nHistory length(0);\r\nHistory targetLength(0);\r\n\r\nSTOPPED = 0;\r\nRECORDING = 1;\r\nPLAYING = 2;\r\n\r\nlen = 441000;\r\nbaseLength = in1;\r\n\r\nif(state==STOPPED && in2){\r\n\tstate = RECORDING;\r\n\tlength=0;\r\n\ttargetLength=0;\r\n}else if(state==RECORDING && in2){\r\n\ttargetLength = min(round(length/baseLength),floor(len/baseLength))*baseLength;\r\n}else if(state==PLAYING && in2){\r\n\tstate=STOPPED;\r\n}\r\n\r\nif(state==RECORDING){\r\n\tlength=length+1;\r\n}\r\n\r\nif(state==RECORDING && targetLength>0 && length>=targetLength){\r\n\tstate=PLAYING;\r\n}\r\n\r\nout1 = state;\r\nout2 = targetLength;\r\n",
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 12.0,

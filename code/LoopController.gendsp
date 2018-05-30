@@ -64,7 +64,7 @@
 			}
 , 			{
 				"box" : 				{
-					"code" : "History length(0);\r\nHistory state(0);\r\n\r\nSTOPPED = 0;\r\nRECORDING = 1;\r\nPLAYING = 2;\r\nlen = 441000;\r\n\r\nif(in1 && state==STOPPED){\r\n\tstate=RECORDING;\r\n}else if(in1 && state==RECORDING){\r\n\tstate=PLAYING;\r\n\tlength = min(length,len);\r\n}else if(in1 && state==PLAYING){\r\n\tstate=STOPPED;\r\n\tlength=0;\r\n}\r\n\r\nif(state==RECORDING){\r\n\tlength = length+1;\r\n}\r\n\r\nout1 = state;\r\nout2 = length;",
+					"code" : "History length(0);\r\nHistory state(0);\r\n\r\nSTOPPED = 0;\r\nRECORDING = 1;\r\nPLAYING = 2;\r\nlen = 441000;\r\n\r\nif(in1 && state==STOPPED){\r\n\tstate=RECORDING;\r\n\tlength=0;\r\n}else if(in1 && state==RECORDING){\r\n\tstate=PLAYING;\r\n\tlength = min(length,len);\r\n}else if(in1 && state==PLAYING){\r\n\tstate=STOPPED;\r\n}\r\n\r\nif(state==RECORDING){\r\n\tlength = length+1;\r\n}\r\n\r\nout1 = state;\r\nout2 = length;",
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 12.0,
