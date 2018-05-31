@@ -39,18 +39,6 @@
 		"subpatcher_template" : "",
 		"boxes" : [ 			{
 				"box" : 				{
-					"id" : "obj-2",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 534.0, 542.0, 37.0, 22.0 ],
-					"style" : "",
-					"text" : "out 2"
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"id" : "obj-20",
 					"maxclass" : "newobj",
 					"numinlets" : 0,
@@ -64,15 +52,15 @@
 			}
 , 			{
 				"box" : 				{
-					"code" : "Data looper(441000);\r\nHistory offset(0);\r\nHistory index(0);\r\nHistory fader(0);\r\nHistory oldState(0);\r\nfadeTime=2205;\r\n\r\n\r\nSTOPPED = 0;\r\nRECORDING = 1;\r\nPLAYING = 2;\r\nlen = dim(looper);\r\n\r\nstate = in2;\r\nlength = in3;\r\n\r\nif(state!=oldState && state==RECORDING){ // flip to recording\r\n\toffset = index;\r\n}\r\noldState = state;\r\nread = 0;\r\n\r\nif(index>=len){\r\n\t\r\n\tindex=0;\r\n}\r\nposition = mod(index+len-offset,len);\r\nif(state != RECORDING && length>0){\r\n\tposition = position%length;\r\n\tindex = mod(offset+position,len);\r\n \tfadeOut = peek(looper, index);\r\n\tfadeIn = peek(looper,mod(index+len-length,len));\r\n\tt = clamp(-(position-length)/fadeTime,0,1)*2-1;\r\n\tread = fadeOut*sqrt(0.5*(1+t))+fadeIn*sqrt(0.5*(1-t));\r\n}\r\n\r\nif(state != PLAYING){\r\n\tpoke(looper,in1, index);\r\n}\r\n\r\nif(state == PLAYING){\r\n\tfader=min(fadeTime,fader+1);\r\n}else if(state==STOPPED){\r\n\tfader=max(0,fader-1);\r\n}\r\n\r\nout1 = read*(fader/fadeTime);\r\n\r\nindex = index+1;\r\n\r\nout2 = offset;\r\n",
+					"code" : "Data looper(441000);\r\nHistory offset(0);\r\nHistory index(0);\r\nHistory fader(0);\r\nHistory oldState(0);\r\nfadeTime=2205;\r\n\r\n\r\nSTOPPED = 0;\r\nRECORDING = 1;\r\nPLAYING = 2;\r\nlen = dim(looper);\r\n\r\nstate = in2;\r\nlength = in3;\r\n\r\nif(state!=oldState && state==RECORDING){ // flip to recording\r\n\toffset = index;\r\n}\r\noldState = state;\r\nread = 0;\r\n\r\nif(index>=len){\r\n\t\r\n\tindex=0;\r\n}\r\nposition = mod(index+len-offset,len);\r\nif(state != RECORDING && length>0){\r\n\tposition = position%length;\r\n\tindex = mod(offset+position,len);\r\n \tfadeOut = peek(looper, index);\r\n\tfadeIn = peek(looper,mod(index+len-length,len));\r\n\tt = clamp(-(position-length)/fadeTime,0,1)*2-1;\r\n\tread = fadeOut*sqrt(0.5*(1+t))+fadeIn*sqrt(0.5*(1-t));\r\n}\r\n\r\nif(state != PLAYING){\r\n\tpoke(looper,in1, index);\r\n}\r\n\r\nif(state == PLAYING){\r\n\tfader=min(fadeTime,fader+1);\r\n}else if(state==STOPPED){\r\n\tfader=max(0,fader-1);\r\n}\r\n\r\nout1 = read*(fader/fadeTime);\r\n\r\nindex = index+1;\r\n",
 					"fontface" : 0,
 					"fontname" : "Arial",
 					"fontsize" : 12.0,
 					"id" : "obj-16",
 					"maxclass" : "codebox",
 					"numinlets" : 3,
-					"numoutlets" : 2,
-					"outlettype" : [ "", "" ],
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
 					"patching_rect" : [ 113.0, 54.0, 743.0, 391.0 ],
 					"style" : ""
 				}
@@ -128,13 +116,6 @@
 				"patchline" : 				{
 					"destination" : [ "obj-16", 1 ],
 					"source" : [ "obj-13", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-2", 0 ],
-					"source" : [ "obj-16", 1 ]
 				}
 
 			}
