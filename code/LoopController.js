@@ -1,9 +1,7 @@
 inlets = 1;
 outlets = 1;
-state = 0;
 
 baseLength = 0;
-length = 0;
 
 STOPPED = 0;
 RECORDING = 1;
@@ -12,16 +10,12 @@ PLAYING =2;
 len = 441000;
 
 function bang(){
-	s = (state+1)%3;
+	var s = (state+1)%3;
 	handleState(s);
 }
 
-function setBaseLength(l){
-	baseLength = l;
-}
-
 function setLength(l){
-	length = l;
+	this.length = l;
 }
 
 function handleState(s){
@@ -31,16 +25,22 @@ function handleState(s){
 	
 	if(state==STOPPED && s==RECORDING){
 		outlet(0,"reset");
-		targetLength=0;
+		this.targetLength=0;
 	}else if(state==RECORDING && s==PLAYING){
-		targetLength = Math.min(Math.round(length/baseLength),Math.floor(len/baseLength))*baseLength;
+		if(baseLength>0){
+			this.targetLength = Math.min(Math.round(this.length/baseLength),Math.floor(len/baseLength))*baseLength;
+		}else{
+			baseLength = this.targetLength = this.length = Math.min(len,this.length);
+		}
 	}
 	
-	state = s;
-	outlet(0,["length",targetLength]);
-	outlet(0,["state",state]);
+	this.state = s;
+	outlet(0,["length",this.targetLength]);
+	outlet(0,["state",this.state]);
 }
 
 function stop(){
+	this.state=0;
+	baseLength = this.targetLength = this.length=0;
 	handleState(STOPPED);
 }
