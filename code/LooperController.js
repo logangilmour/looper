@@ -14,9 +14,21 @@ function midievent(channel,control,value)
 	if(pressing && channel==137){
 		pressing=false;
 	}
+	var empty = true;
+	for(i=0; i<states.length; i++){
+		empty &= states[i].state==0;
+	}
+	if(empty){
+		clear();
+	}
 }
 
 function bang(){
+	clear();
+}
+
+function clear(){
 	outlet(0,"stop");
 	messnamed("baseLength",0);
 }
+

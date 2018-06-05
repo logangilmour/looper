@@ -7,15 +7,23 @@ STOPPED = 0;
 RECORDING = 1;
 PLAYING =2;
 
-len = 441000;
+len = 13230000;
+
+this.state=0;
+
 
 function bang(){
-	var s = (state+1)%3;
+	var s = (this.state+1)%3;
 	handleState(s);
 }
 
 function setLength(l){
 	this.length = l;
+}
+
+function setIndex(i){
+	this.index = i-1;
+	states[index]=this;
 }
 
 function handleState(s){
